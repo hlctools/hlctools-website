@@ -2,64 +2,368 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HLC Tools</title>
-
   <style>
+    :root {
+      --bg-0: #020817;
+      --bg-1: #06182b;
+      --bg-2: #0b2740;
+      --card: rgba(15, 35, 58, 0.72);
+      --card-border: rgba(91, 150, 211, 0.34);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --blue: #2f91ff;
+      --blue-strong: #0f6cf2;
+      --green: #25d990;
+      --purple: #a174ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 5%, rgba(37, 99, 160, 0.46) 0, rgba(37, 99, 160, 0.20) 22%, transparent 48%),
+        radial-gradient(circle at 50% 40%, rgba(12, 53, 87, 0.50) 0, transparent 54%),
+        linear-gradient(180deg, var(--bg-2) 0%, var(--bg-1) 42%, var(--bg-0) 100%);
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: min(980px, calc(100vw - 48px));
+      margin: 0 auto;
+      padding-top: 26px;
       text-align: center;
     }
 
-    .container {
-      max-width: 700px;
-      padding: 20px;
+    .brand-icon {
+      width: 168px;
+      height: 168px;
+      margin: 0 auto 16px;
+      border-radius: 38px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at 28% 10%, rgba(124, 203, 255, 0.34) 0%, rgba(73, 153, 226, 0.18) 21%, transparent 42%),
+        linear-gradient(145deg, #123a66 0%, #082341 38%, #04172e 100%);
+      border: 1px solid rgba(112, 174, 245, 0.38);
+      box-shadow:
+        0 24px 44px rgba(0, 0, 0, 0.46),
+        0 0 0 1px rgba(255, 255, 255, 0.035) inset,
+        0 0 32px rgba(54, 142, 255, 0.22),
+        0 -1px 16px rgba(118, 203, 255, 0.22);
+      overflow: hidden;
     }
 
-    h1 {
-      font-size: 60px;
-      margin-bottom: 10px;
+    .brand-icon::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 0;
+      height: 34px;
+      border-radius: 0 0 50% 50%;
+      background: linear-gradient(180deg, rgba(157, 222, 255, 0.38), rgba(157, 222, 255, 0.05) 72%, transparent);
+      filter: blur(2px);
+      opacity: 0.78;
+      pointer-events: none;
     }
 
-    p {
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      inset: 7px;
+      border-radius: 32px;
+      border-top: 1px solid rgba(185, 225, 255, 0.38);
+      border-left: 1px solid rgba(103, 171, 246, 0.22);
+      opacity: 0.75;
+      pointer-events: none;
+    }
+
+    .brand-hlc {
+      font-size: 54px;
+      line-height: 0.92;
+      letter-spacing: 1px;
+      font-weight: 800;
+      z-index: 1;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+    }
+
+    .brand-tools {
+      margin-top: 8px;
+      font-size: 25px;
+      line-height: 1;
+      letter-spacing: 2px;
+      font-weight: 800;
+      z-index: 1;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+    }
+
+    .tagline {
+      margin: 0 auto 24px;
+      color: var(--muted);
       font-size: 20px;
-      color: #cbd5e1;
+      line-height: 1.38;
+      font-weight: 400;
     }
 
     .apps {
-      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
     }
 
-    .app {
-      background: #1e293b;
-      padding: 15px;
-      margin: 10px;
+    .app-card {
+      min-height: 104px;
+      padding: 18px 28px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background:
+        linear-gradient(180deg, rgba(20, 48, 78, 0.74), rgba(8, 26, 45, 0.66));
+      box-shadow:
+        0 14px 32px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+      display: grid;
+      grid-template-columns: 60px 1fr 170px;
+      gap: 22px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .app-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .app-icon svg {
+      width: 44px;
+      height: 44px;
+      display: block;
+      overflow: visible;
+    }
+
+    .app-title {
+      margin: 0 0 6px;
+      font-size: 24px;
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .app-desc {
+      margin: 0 0 8px;
+      color: #e2e8f0;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .version {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .version.green { color: var(--green); }
+    .version.purple { color: var(--purple); }
+
+    .action {
+      justify-self: end;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 138px;
+      height: 48px;
+      padding: 0 22px;
       border-radius: 10px;
-      font-size: 18px;
+      color: white;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 800;
+      background: linear-gradient(180deg, #2f97ff 0%, #0f64de 100%);
+      border: 1px solid rgba(124, 190, 255, 0.55);
+      box-shadow: 0 12px 24px rgba(0, 94, 255, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    }
+
+    .action:hover { transform: translateY(-1px); }
+
+    .action.disabled {
+      background: linear-gradient(180deg, rgba(109, 81, 184, 0.78), rgba(55, 39, 119, 0.82));
+      border-color: rgba(161, 116, 255, 0.28);
+      color: #d8c8ff;
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .footer {
+      margin-top: auto;
+      padding: 36px 20px 22px;
+      text-align: center;
+      color: #aeb9c8;
+      font-size: 15px;
+    }
+
+    .support {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .support a {
+      color: #2f91ff;
+      text-decoration: none;
+    }
+
+    .support a:hover { text-decoration: underline; }
+
+    .separator {
+      opacity: 0.35;
+    }
+
+    @media (max-height: 820px) and (min-width: 800px) {
+      .page { padding-top: 18px; }
+      .brand-icon { width: 142px; height: 142px; border-radius: 32px; margin-bottom: 12px; }
+      .brand-icon::after { border-radius: 27px; }
+      .brand-hlc { font-size: 45px; }
+      .brand-tools { font-size: 21px; margin-top: 7px; }
+      .tagline { font-size: 18px; margin-bottom: 20px; }
+      .apps { gap: 11px; }
+      .app-card { min-height: 91px; padding: 14px 26px; grid-template-columns: 58px 1fr 160px; }
+      .app-title { font-size: 22px; margin-bottom: 5px; }
+      .app-desc { font-size: 15px; margin-bottom: 6px; }
+      .action { height: 44px; min-width: 132px; }
+      .footer { padding-top: 32px; padding-bottom: 18px; }
+    }
+
+    @media (max-width: 760px) {
+      body { min-height: 100%; }
+      .page { width: min(100% - 28px, 560px); padding-top: 24px; }
+      .brand-icon { width: 146px; height: 146px; border-radius: 32px; }
+      .brand-hlc { font-size: 46px; }
+      .brand-tools { font-size: 22px; }
+      .tagline { font-size: 18px; }
+      .app-card {
+        grid-template-columns: 48px 1fr;
+        padding: 18px;
+        gap: 16px;
+      }
+      .action {
+        grid-column: 1 / -1;
+        justify-self: stretch;
+        width: 100%;
+      }
+      .footer { padding-top: 36px; }
+      .separator { display: none; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>HLC Tools</h1>
+  <main class="page">
+    <div class="brand-icon" aria-label="HLC Tools logo">
+      <div class="brand-hlc">HLC</div>
+      <div class="brand-tools">— TOOLS —</div>
+    </div>
 
-    <p>
-      Structural engineering tools built for speed and simplicity.
+    <p class="tagline">
+      Structural engineering software<br />
+      built for speed, accuracy and simplicity.
     </p>
 
-    <div class="apps">
-      <div class="app">IDEA Statica Load Importer</div>
-      <div class="app">Governing Load Combinations</div>
-      <div class="app">Other steel Connections (WIP)</div>
+    <section class="apps" aria-label="HLC Tools applications">
+      <article class="app-card">
+        <div class="app-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M14 5h14l8 8v30H14V5z" stroke="#2f91ff" stroke-width="2.8"/>
+            <path d="M28 5v10h8" stroke="#2f91ff" stroke-width="2.8"/>
+            <path d="M19 25h16" stroke="#2f91ff" stroke-width="2.8" stroke-linecap="round"/>
+            <path d="M29 18l7 7-7 7" stroke="#2f91ff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="app-title">IDEA StatiCa Load Importer</h2>
+          <p class="app-desc">Import thousands of load combinations directly into IDEA StatiCa using the API.</p>
+          <div class="version">Version 2026.1.2</div>
+        </div>
+        <a class="action" href="#" aria-label="Download IDEA StatiCa Load Importer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 4v10" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+            <path d="M7.5 10.5 12 15l4.5-4.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 20h14" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+          </svg>
+          Download
+        </a>
+      </article>
+
+      <article class="app-card">
+        <div class="app-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect x="7" y="7" width="34" height="34" rx="3" stroke="#25d990" stroke-width="2.8"/>
+            <path d="M18 7v34M7 18h34M7 30h34" stroke="#25d990" stroke-width="2.6"/>
+            <path d="M24 13h10M24 24h8M24 36h10" stroke="#25d990" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="app-title">Governing Load Extractor</h2>
+          <p class="app-desc">Automatically determine governing member loads from analysis results.</p>
+          <div class="version green">Version 2026.1</div>
+        </div>
+        <a class="action" href="#" aria-label="Download Governing Load Extractor">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 4v10" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+            <path d="M7.5 10.5 12 15l4.5-4.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 20h14" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+          </svg>
+          Download
+        </a>
+      </article>
+
+      <article class="app-card">
+        <div class="app-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="8" r="4" stroke="#a174ff" stroke-width="2.8"/>
+            <circle cx="9" cy="37" r="4" stroke="#a174ff" stroke-width="2.8"/>
+            <circle cx="39" cy="37" r="4" stroke="#a174ff" stroke-width="2.8"/>
+            <path d="M22 12 11 33M26 12l11 21M13 37h22" stroke="#a174ff" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="app-title">Quick Connections</h2>
+          <p class="app-desc">Design and check steel connections faster and smarter.</p>
+          <div class="version purple">Coming Soon</div>
+        </div>
+        <span class="action disabled">Coming Soon</span>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="support">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="2"/>
+        <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      </svg>
+      <span>Need help?</span>
+      <span class="separator">|</span>
+      <a href="mailto:support@hlctools.com">support@hlctools.com</a>
     </div>
-  </div>
+    <div>© 2026 HLC Tools. All rights reserved.</div>
+  </footer>
 </body>
 </html>
